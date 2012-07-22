@@ -524,7 +524,7 @@ template bvec operator-(const bvec &v);
 // multiplication operator
 
 #if !defined(HAVE_BLAS)
-template double dot(const vec &v1, const vec &v2);
+//template double dot(const vec &v1, const vec &v2);
 #endif
 template std::complex<double> dot(const cvec &v1, const cvec &v2);
 template int dot(const ivec &v1, const ivec &v2);
@@ -538,7 +538,7 @@ template short operator*(const svec &v1, const svec &v2);
 template bin operator*(const bvec &v1, const bvec &v2);
 
 #if !defined(HAVE_BLAS)
-template mat outer_product(const vec &v1, const vec &v2, bool hermitian);
+//template mat outer_product(const vec &v1, const vec &v2, bool hermitian);
 #endif
 template imat outer_product(const ivec &v1, const ivec &v2, bool hermitian);
 template smat outer_product(const svec &v1, const svec &v2, bool hermitian);
