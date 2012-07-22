@@ -7,6 +7,10 @@ itpp::it_file file;
 
 int it_file_open(const char *const file_name)
 {
+    if (NULL == file_name)
+    {
+        return EXIT_FAILURE;
+    }
     file.open(file_name);
     return itpp::exist(file_name)?EXIT_SUCCESS:EXIT_FAILURE;
 }
@@ -16,6 +20,12 @@ static
 int it_file_read_template(const char *const name, T *const data, int *const data_size)
 {
     itpp::Vec<T> out;
+
+    if ((NULL == name) || (NULL == data) || (NULL == data_size))
+    {
+        return EXIT_FAILURE;
+    }
+
     file >> itpp::Name(name) >> out;
     if (*data_size < out.size())
     {
@@ -31,6 +41,10 @@ template<class T>
 static
 int it_file_write_template(const char *const name, const T *const data, int data_size)
 {
+    if ((NULL == name) || (NULL == data))
+    {
+        return EXIT_FAILURE;
+    }
     itpp::Vec<T> out(data_size);
     memcpy(out._data(), data, data_size*sizeof(*data));
     file << itpp::Name(name) << out;
