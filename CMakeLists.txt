@@ -18,7 +18,8 @@ set (itFileModule_SRCS
     src/inv.cpp
     src/schur.cpp
     src/binary.cpp
-    src/it_file.cpp)
+    src/it_file.cpp
+    src/itcompat.cpp)
 
 add_subdirectory (test)
 
