@@ -5,5 +5,5 @@ set (testITFile_SRCS
 
 add_executable (testITFile ${testITFile_SRCS})
 target_link_libraries(testITFile
-    ${CMAKE_CURRENT_BINARY_DIR}/../libitfile.so
+    itfile
     m)
