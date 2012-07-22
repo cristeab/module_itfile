@@ -23,4 +23,4 @@ set (itFileModule_SRCS
 
 add_subdirectory (test)
 
-add_library (itfile STATIC ${itFileModule_SRCS})
+add_library (itfile SHARED ${itFileModule_SRCS})
