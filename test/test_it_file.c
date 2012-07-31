@@ -8,6 +8,7 @@
 #define LENGTH 100
 #define OMEGA (PI/6.0)
 #define FILE_NAME "test_it_file.it"
+#define MATLAB_GENERATED_FN "test_it_file_matlab.it"
 #define VAR_NAME "signal"
 #define VAR_NAME_I "signal_i"
 
@@ -19,6 +20,7 @@ int main(void)
     int *ref_signal_i = malloc(LENGTH*sizeof(*ref_signal_i));
     int n;
     int out = EXIT_FAILURE;
+    int i;
 
     /* check inputs */
     if (EXIT_FAILURE != it_file_open(NULL))
@@ -67,6 +69,7 @@ int main(void)
         printf("Cannot read variable\n");
         goto fail;
     }
+    it_file_close();
     for (n = 0; n < LENGTH; ++n)
     {
         if (signal[n] != ref_signal[n])
@@ -80,6 +83,55 @@ int main(void)
             goto fail;
         }
     }
+
+    /* load a MATLAB generated it file */
+    if (EXIT_SUCCESS != it_file_open(MATLAB_GENERATED_FN))
+    {
+        printf("Cannot open %s\n", MATLAB_GENERATED_FN);
+        goto fail;
+    }
+    n = 10;
+    if ((EXIT_SUCCESS != it_file_read_int("x_int", signal_i, &n)) || (10 != n))
+    {
+        printf("Cannot get vector of ints\n");
+        goto fail;
+    }
+    for (i = 0; i < n; ++i)
+    {
+        if ((i+1) != signal_i[i])
+        {
+            printf("int vector is wrong\n");
+            goto fail;
+        }
+    }
+    n = 1;
+    if ((EXIT_SUCCESS != it_file_read_int("x_scalar", signal_i, &n)) || (1 != n) || (11 != signal_i[0]))
+    {
+        printf("Cannot get vector of int scalar\n");
+        goto fail;
+    }
+    n = 10;
+    if ((EXIT_SUCCESS != it_file_read_double("x_double", signal, &n)) || (10 != n))
+    {
+        printf("Cannot get vector of doubles %d\n", n);
+        goto fail;
+    }
+    for (i = 0; i < n; ++i)
+    {
+        if ((double)(i+1)/20.0 != signal[i])
+        {
+            printf("double vector is wrong\n");
+            goto fail;
+        }
+    }
+    n = 1;
+    if ((EXIT_SUCCESS != it_file_read_double("x_scalar_dbl", signal, &n)) || (1 != n) || (3.1415 != signal[0]))
+    {
+        printf("Scalar of doubles is wrong\n");
+        goto fail;
+    }
+
+    it_file_close();
 
     printf("SUCCESS\n");
     out = EXIT_SUCCESS;
