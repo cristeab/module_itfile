@@ -15,6 +15,16 @@ int it_file_open(const char *const file_name)
     return itpp::exist(file_name)?EXIT_SUCCESS:EXIT_FAILURE;
 }
 
+int it_file_open_ro(const char *const file_name)
+{
+    if ((NULL == file_name) || (false == itpp::exist(file_name)))
+    {
+        return EXIT_FAILURE;
+    }
+    file.itpp::it_ifile::open(file_name);
+    return EXIT_SUCCESS;
+}
+
 template<class T>
 static
 int it_file_read_template(const char *const name, T *const data, int *const data_size)
