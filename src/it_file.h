@@ -12,6 +12,7 @@ extern "C" {
 #endif
 
 DllExport int it_file_open(const char *const file_name);
+DllExport int it_file_open_ro(const char *const file_name);
 DllExport int it_file_read_double(const char *const name, double *const data, int *const data_size);
 DllExport int it_file_write_double(const char *const name, const double *const data, int data_size);
 DllExport int it_file_read_int(const char *const name, int *const data, int *const data_size);

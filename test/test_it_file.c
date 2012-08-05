@@ -130,7 +130,25 @@ int main(void)
         printf("Scalar of doubles is wrong\n");
         goto fail;
     }
+    it_file_close();
 
+    /* test read only */
+    if (EXIT_SUCCESS != it_file_open_ro(MATLAB_GENERATED_FN))
+    {
+        printf("Cannot open file in read only mode\n");
+        goto fail;
+    }
+    n = 1;
+    if ((EXIT_SUCCESS != it_file_read_double("x_scalar_dbl", signal, &n)) || (1 != n) || (3.1415 != signal[0]))
+    {
+        printf("Scalar of doubles is wrong\n");
+        goto fail;
+    }
+    if (EXIT_SUCCESS == it_file_write_double("x_scalar_dbl", signal, n))
+    {
+        printf("The file should be read only\n");
+        goto fail;
+    }
     it_file_close();
 
     printf("SUCCESS\n");

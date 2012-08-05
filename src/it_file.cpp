@@ -4,6 +4,8 @@
 
 static
 itpp::it_file file;
+static
+bool ro_flag = false;
 
 int it_file_open(const char *const file_name)
 {
@@ -22,6 +24,7 @@ int it_file_open_ro(const char *const file_name)
         return EXIT_FAILURE;
     }
     file.itpp::it_ifile::open(file_name);
+    ro_flag = true;
     return EXIT_SUCCESS;
 }
 
@@ -51,7 +54,7 @@ template<class T>
 static
 int it_file_write_template(const char *const name, const T *const data, int data_size)
 {
-    if ((NULL == name) || (NULL == data))
+    if ((NULL == name) || (NULL == data) || (true == ro_flag))
     {
         return EXIT_FAILURE;
     }
