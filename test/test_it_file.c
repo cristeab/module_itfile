@@ -74,12 +74,12 @@ int main(void)
     {
         if (signal[n] != ref_signal[n])
         {
-            printf("Values don't match\ni");
+            printf("Values don't match, err %f\n", signal[n]-ref_signal[n]);
             goto fail;
         }
         if (signal_i[n] != ref_signal_i[n])
         {
-            printf("Values don't match\ni");
+            printf("Values don't match, err %d\n", signal_i[n]-ref_signal_i[n]);
             goto fail;
         }
     }
@@ -160,3 +160,4 @@ fail:
     free(ref_signal_i);
     return out;
 }
+

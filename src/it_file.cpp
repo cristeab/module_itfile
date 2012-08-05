@@ -1,6 +1,7 @@
+#include <iostream>
+#include <cstdlib>
 #include "it_file.h"
 #include "itfile.h"/* IT++ implementation */
-#include <cstdlib>
 
 static
 itpp::it_file file;
@@ -25,6 +26,65 @@ int it_file_open_ro(const char *const file_name)
     }
     file.itpp::it_ifile::open(file_name);
     ro_flag = true;
+    return EXIT_SUCCESS;
+}
+
+#define CHECK_LENGTH(v) if (*data_size < v.size()) {\
+        *data_size = v.size();\
+        return EXIT_FAILURE;\
+    }\
+    *data_size = v.size();\
+    for (int i = 0; i < v.size(); ++i) {\
+        data[i] = double(v[i]);\
+    }
+
+/* this function is generic enough to read any vector in an array of double */
+static
+int it_file_read_double_(const char *const name, double *const data, int *const data_size)
+{
+    if ((NULL == name) || (NULL == data) || (NULL == data_size))
+    {
+        return EXIT_FAILURE;
+    }
+
+    //find variable and read its type
+    file.seek(name);
+    itpp::it_ifile::data_header h;
+    file.read_data_header(h);
+
+    // read data
+    if ("fvec" == h.type)
+    {
+        itpp::vec v;
+        file.low_level_read_lo(v);
+        CHECK_LENGTH(v);
+    } else if ("dvec" == h.type)
+    {
+        itpp::vec v;
+        file.low_level_read_hi(v);
+        CHECK_LENGTH(v);
+    } else if ("ivec" == h.type)
+    {
+        itpp::ivec v;
+        file.low_level_read(v);
+        CHECK_LENGTH(v);
+    } else if ("bvec" == h.type)
+    {
+        itpp::bvec v;
+        file.low_level_read(v);
+        CHECK_LENGTH(v);
+    } else if ("svec" == h.type)
+    {
+        itpp::svec v;
+        file.low_level_read(v);
+        CHECK_LENGTH(v);
+    } else
+    {
+        std::cerr << "type: " << h.type << std::endl;
+        it_error("it_read_file_double_(): unhandled type");
+        return EXIT_FAILURE;
+    }
+
     return EXIT_SUCCESS;
 }
 
@@ -67,7 +127,7 @@ int it_file_write_template(const char *const name, const T *const data, int data
 
 int it_file_read_double(const char *const name, double *const data, int *const data_size)
 {
-    return it_file_read_template<>(name, data, data_size);
+    return it_file_read_double_(name, data, data_size);
 }
 
 int it_file_write_double(const char *const name, const double *const data, int data_size)
